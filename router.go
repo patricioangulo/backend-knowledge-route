@@ -18,6 +18,7 @@ func SetupRouter() *gin.Engine {
 	{
 		public.GET("/hello", HelloHandler)
 		public.GET("/goodbye", GoodbyeHandler)
+		public.POST("/bookings", CreateBookingHandler)
 	}
 
 	// Routes requiring reCAPTCHA

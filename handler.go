@@ -24,6 +24,8 @@ func GoodbyeHandler(w http.ResponseWriter, r *http.Request) {
 }*/
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -42,5 +44,25 @@ func HelloHandler(c *gin.Context) {
 func GoodbyeHandler(c *gin.Context) {
 	c.JSON(200, Response{
 		Message: messageService.GoodbyeMessage(),
+	})
+}
+
+func CreateBookingHandler(c *gin.Context) {
+	var booking Booking
+
+	if err := c.ShouldBindJSON(&booking); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	result, err := CreateBooking(booking)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create booking"})
+		return
+	}
+
+	c.JSON(http.StatusCreated, gin.H{
+		"message": "Booking created",
+		"id":      result.InsertedID,
 	})
 }
